@@ -108,36 +108,109 @@ Window.Title = "DUCZ HUB"
 -- Tabs
 local Tabs = {
 	Main0=Window:AddTab({Title="Thông Tin"}),
-	Main1=Window:AddTab({Title="Blox Fruits"}),
-	Main2=Window:AddTab({Title="Grow A Garden"}),
-	Main3=Window:AddTab({Title="99 Nights In The Forest"})
+	Main1=Window:AddTab({Title="Script Main"}),
+	Main2=Window:AddTab({Title="Script Hop Sever"}),
+	Main3=Window:AddTab({Title="Script PVP"})
 }
 
 -- Tab 0: Thông Tin
-Tabs.Main0:AddButton({ Title="Youtuber", Description="Grai2", Callback=function() setclipboard("https://youtube.com/@grai2") end })
+Tabs.Main0:AddButton({ Title="Youtuber", Description="Ducz ROBLOX", Callback=function() setclipboard("https://youtube.com/@DUCZGAMERNE") end })
 
 -- Tab 1: Blox Fruits
-Tabs.Main1:AddButton({ Title="Redz Hub", Callback=function() local Settings={JoinTeam="Pirates",Translator=true} loadstring(game:HttpGet("https://raw.githubusercontent.com/newredz/BloxFruits/refs/heads/main/Source.luau"))(Settings) end })
-Tabs.Main1:AddButton({ Title="w-azure Hub", Callback=function() loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/85e904ae1ff30824c1aa007fc7324f8f.lua"))() end })
-Tabs.Main1:AddButton({ Title="Fix Lag", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/TurboLite/Script/main/FixLag.lua"))() end })
-Tabs.Main1:AddButton({ Title="Min Hub", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/Min/refs/heads/main/MinXt2Eng"))() end })
-Tabs.Main1:AddButton({ Title="Speed Hub X", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() end })
-Tabs.Main1:AddButton({ Title="Than Hub", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/thantzy/thanhub/refs/heads/main/thanv1"))() end })
-Tabs.Main1:AddButton({ Title="BlueX HUb", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/refs/heads/main/Main.lua"))() end })
-Tabs.Main1:AddButton({ Title="Tsoul Hub", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/Tsuoscripts"))() end })
-Tabs.Main1:AddButton({ Title="Volcano Hub V3", Callback=function() loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/indexeduu/BF-NewVer/refs/heads/main/V3New.lua"))() end })
-Tabs.Main1:AddButton({ Title="HOHO Hub", Callback=function() loadstring(game:HttpGet('https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI'))() end })
+
+Tabs.Main1:AddButton({
+    Title="Vantablack Hub",
+    Callback=function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tranduykhanh08428-web/V.V/refs/heads/main/VantablackHud.lua.txt"))()
+    end
+})
+Tabs.Main1:AddButton({
+    Title="w-azure premium Hub",
+    Callback=function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaAnarchist/YeuEmNhieuLam/refs/heads/main/w-azure.luau"))()
+    end
+})
+Tabs.Main1:AddButton({
+    Title="NatAov HUB",
+    Callback=function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-AnhTuansitink/NatAov-Hub/refs/heads/main/ILoveYou.lua"))()
+    end
+})
+Tabs.Main1:AddButton({
+    Title="Apple Hub",
+    Callback=function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AlexHerrySeek/AppleHub/refs/heads/main/loader/main.lua"))()
+    end
+})
+Tabs.Main1:AddButton({
+    Title="Speed Hub X",
+    Callback=function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+    end
+})
+Tabs.Main1:AddButton({
+    Title="XETER Hub v1",
+    Callback=function()
+         getgenv().Version = "V1"
+         getgenv().Team = "Marines"
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/TlDinhKhoi/Xeter/refs/heads/main/Main.lua"))()
+    end
+})
+Tabs.Main1:AddButton({
+    Title="Xete HUb V2",
+    Callback=function()
+        getgenv().Version = "V2"
+        getgenv().Team = "Marines"
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TlDinhKhoi/Xeter/refs/heads/main/Main.lua"))()
+    end
+})
+Tabs.Main1:AddButton({
+    Title="Xeter Hub V3",
+    Callback=function()
+        getgenv().Version = "V3"
+        getgenv().Team = "Marines"
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TlDinhKhoi/Xeter/refs/heads/main/Main.lua"))()
+    end
+})
+Tabs.Main1:AddButton({
+    Title="Teddy HUB MAIN",
+    Callback=function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/e86ed284a22672d29e906214e7bbf8b9.lua"))()
+    end
+})
+Tabs.Main1:AddButton({
+    Title="HOHO Hub",
+    Callback=function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI'))()
+    end
+})
+
+Tabs.Main1:AddButton({
+    Title="Tày hub premium",
+    Callback=function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/VTDROBLOX/Animehub/refs/heads/main/Tayhub-PREMIUM.lua"))()
+    end
+})
+Tabs.Main1:AddButton({
+    Title="Xeter Hub V4",
+    Callback=function()
+        getgenv().Version = "V4"
+        getgenv().Team = "Marines"
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TlDinhKhoi/Xeter/refs/heads/main/Main.lua"))()
+    end
+})
 
 -- Tab 2: Grow A Garden
-Tabs.Main2:AddButton({ Title="Nat Hub", Callback=function() loadstring(game:HttpGet("https://get.nathub.xyz/loader"))() end })
-Tabs.Main2:AddButton({ Title="Speed Hub X", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() end })
-Tabs.Main2:AddButton({ Title="No Lag Hub", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/NoLag-id/No-Lag-HUB/refs/heads/main/Loader/Main.lua"))() end })
-Tabs.Main2:AddButton({ Title="BlueX Hub", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/refs/heads/main/Main.lua"))() end })
+Tabs.Main2:AddButton({
+    Title="Teddy Hub",
+    Callback=function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Teddyseetink/Haidepzai/refs/heads/main/TEDDYHUB-FREEMIUM"))()
+    end
+})
+
 
 -- Tab 3: 99 Nights In The Forest
-Tabs.Main3:AddButton({ Title="Voidware Hub", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VW-Add/main/nightsintheforest.lua", true))() end })
-Tabs.Main3:AddButton({ Title="Speed Hub X", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() end })
-Tabs.Main3:AddButton({ Title="Pulse HUb", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Chavels123/Loader/refs/heads/main/loader.lua"))() end })
+
 
 ------------------------------------------------------------
 -- THÊM TOGGLE UI BẰNG BUTTON VÀ PHÍM END (KHÔNG XÓA TAB Blox Fruits)
