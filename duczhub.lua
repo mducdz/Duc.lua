@@ -121,7 +121,7 @@ Tabs.Main0:AddButton({ Title="Youtuber", Description="Ducz ROBLOX", Callback=fun
 Tabs.Main1:AddButton({
     Title="Vantablack Hub",
     Callback=function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/tranduykhanh08428-web/V.V/refs/heads/main/VantablackHud.lua.txt"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tranduykhanh08428-web/V.V/refs/heads/main/VantablackHud.lua"))()
     end
 })
 Tabs.Main1:AddButton({
