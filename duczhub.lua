@@ -23,7 +23,7 @@ logo.AnchorPoint = Vector2.new(0.5,0.5)
 logo.Position = UDim2.new(0.5,0,0.5,0)
 logo.Size = UDim2.new(0,0,0,0)
 logo.BackgroundTransparency = 1
-logo.Image = "http://www.roblox.com/asset/?id=77111304194141"
+logo.Image = "http://www.roblox.com/asset/?id=133060444314687"
 logo.ImageTransparency = 1
 
 -- Zoom + fade in
@@ -94,7 +94,7 @@ repeat task.wait() until game:IsLoaded()
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local Window = Fluent:CreateWindow({
 	Title="DUCZ HUB",
-	SubTitle="by DUCZROBLOX",
+	SubTitle="by realducz",
 	TabWidth=157,
 	Size=UDim2.fromOffset(450,300),
 	Acrylic=true,
