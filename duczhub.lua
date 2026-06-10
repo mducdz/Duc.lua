@@ -1,53 +1,26 @@
-local Key = "duczhubontop"
+local CorrectKey = "duczontop"
 local GetKeyLink = "https://link4sub.com/notes/SKRi"
 
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
-
-local Frame = Instance.new("Frame")
-Frame.Parent = ScreenGui
-Frame.Size = UDim2.new(0,300,0,200)
-Frame.Position = UDim2.new(0.5,-150,0.5,-100)
-
-local KeyBox = Instance.new("TextBox")
-KeyBox.Parent = Frame
-KeyBox.Size = UDim2.new(0.9,0,0,30)
-KeyBox.Position = UDim2.new(0.05,0,0.15,0)
-KeyBox.PlaceholderText = "Nhap Key"
-
-local LinkBox = Instance.new("TextBox")
-LinkBox.Parent = Frame
-LinkBox.Size = UDim2.new(0.9,0,0,30)
-LinkBox.Position = UDim2.new(0.05,0,0.4,0)
-LinkBox.Text = GetKeyLink
-LinkBox.PlaceholderText = "Link Get Key"
-
-local GetKeyButton = Instance.new("TextButton")
-GetKeyButton.Parent = Frame
-GetKeyButton.Size = UDim2.new(0.4,0,0,30)
-GetKeyButton.Position = UDim2.new(0.05,0,0.7,0)
-GetKeyButton.Text = "Get Key"
-
-local CheckButton = Instance.new("TextButton")
-CheckButton.Parent = Frame
-CheckButton.Size = UDim2.new(0.4,0,0,30)
-CheckButton.Position = UDim2.new(0.55,0,0.7,0)
-CheckButton.Text = "Check Key"
+-- Ô nhập key
+KeyBox.PlaceholderText = "Enter Key"
+KeyBox.Text = "" -- luôn trống
 
 GetKeyButton.MouseButton1Click:Connect(function()
-    setclipboard(LinkBox.Text)
-    print("Da copy link get key")
+    if setclipboard then
+        setclipboard(GetKeyLink)
+    end
+    print("Link Get Key copied")
 end)
 
 CheckButton.MouseButton1Click:Connect(function()
-    if KeyBox.Text == Key then
+    if KeyBox.Text:gsub("%s+","") == CorrectKey then
+
         Frame:Destroy()
 
-        -- MENU CHINH HOAC SCRIPT CHINH DAT O DAY
+        -- MENU CHÍNH ĐẶT Ở ĐÂY
 
-        print("Key dung")
     else
-        print("Key sai")
+        print("Wrong Key")
     end
 end)
 local Players = game:GetService("Players")
