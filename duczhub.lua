@@ -1,27 +1,74 @@
 local CorrectKey = "duczontop"
 local GetKeyLink = "https://link4sub.com/notes/SKRi"
 
--- Ô nhập key
+local Player = game.Players.LocalPlayer
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = Player:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+local Frame = Instance.new("Frame")
+Frame.Parent = ScreenGui
+Frame.Size = UDim2.new(0,300,0,180)
+Frame.Position = UDim2.new(0.5,-150,0.5,-90)
+Frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+
+local Title = Instance.new("TextLabel")
+Title.Parent = Frame
+Title.Size = UDim2.new(1,0,0,35)
+Title.BackgroundTransparency = 1
+Title.Text = "HZZ HUB | GET KEY"
+Title.TextColor3 = Color3.new(1,1,1)
+
+local KeyBox = Instance.new("TextBox")
+KeyBox.Parent = Frame
+KeyBox.Size = UDim2.new(0.9,0,0,35)
+KeyBox.Position = UDim2.new(0.05,0,0.3,0)
 KeyBox.PlaceholderText = "Enter Key"
-KeyBox.Text = "" -- luôn trống
+KeyBox.Text = ""
+
+local GetKeyButton = Instance.new("TextButton")
+GetKeyButton.Parent = Frame
+GetKeyButton.Size = UDim2.new(0.4,0,0,35)
+GetKeyButton.Position = UDim2.new(0.05,0,0.7,0)
+GetKeyButton.Text = "Get Key"
+
+local CheckButton = Instance.new("TextButton")
+CheckButton.Parent = Frame
+CheckButton.Size = UDim2.new(0.4,0,0,35)
+CheckButton.Position = UDim2.new(0.55,0,0.7,0)
+CheckButton.Text = "Check"
 
 GetKeyButton.MouseButton1Click:Connect(function()
     if setclipboard then
         setclipboard(GetKeyLink)
     end
-    print("Link Get Key copied")
+    print("Copied:", GetKeyLink)
 end)
+
+local function OpenMainHub()
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Parent = ScreenGui
+    MainFrame.Size = UDim2.new(0,400,0,250)
+    MainFrame.Position = UDim2.new(0.5,-200,0.5,-125)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(20,20,20)
+
+    local Label = Instance.new("TextLabel")
+    Label.Parent = MainFrame
+    Label.Size = UDim2.new(1,0,0,40)
+    Label.BackgroundTransparency = 1
+    Label.Text = "HZZ HUB"
+    Label.TextColor3 = Color3.new(1,1,1)
+end
 
 CheckButton.MouseButton1Click:Connect(function()
     if KeyBox.Text:gsub("%s+","") == CorrectKey then
-
         Frame:Destroy()
-
-        -- MENU CHÍNH ĐẶT Ở ĐÂY
-
+        OpenMainHub()
     else
-        print("Wrong Key")
+        warn("Wrong Key")
     end
+end)
 end)
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
