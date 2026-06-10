@@ -3,66 +3,51 @@ local GetKeyLink = "https://link4sub.com/notes/SKRi"
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
-ScreenGui.ResetOnSpawn = false
 
 local Frame = Instance.new("Frame")
 Frame.Parent = ScreenGui
-Frame.Size = UDim2.new(0,300,0,180)
-Frame.Position = UDim2.new(0.5,-150,0.5,-90)
-Frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
-
-local Title = Instance.new("TextLabel")
-Title.Parent = Frame
-Title.Size = UDim2.new(1,0,0,30)
-Title.Text = "Get Key System"
-Title.BackgroundTransparency = 1
-Title.TextColor3 = Color3.new(1,1,1)
+Frame.Size = UDim2.new(0,300,0,200)
+Frame.Position = UDim2.new(0.5,-150,0.5,-100)
 
 local KeyBox = Instance.new("TextBox")
 KeyBox.Parent = Frame
 KeyBox.Size = UDim2.new(0.9,0,0,30)
-KeyBox.Position = UDim2.new(0.05,0,0.25,0)
-KeyBox.PlaceholderText = "Enter Key"
+KeyBox.Position = UDim2.new(0.05,0,0.15,0)
+KeyBox.PlaceholderText = "Nhap Key"
 
 local LinkBox = Instance.new("TextBox")
 LinkBox.Parent = Frame
 LinkBox.Size = UDim2.new(0.9,0,0,30)
-LinkBox.Position = UDim2.new(0.05,0,0.5,0)
+LinkBox.Position = UDim2.new(0.05,0,0.4,0)
 LinkBox.Text = GetKeyLink
+LinkBox.PlaceholderText = "Link Get Key"
 
 local GetKeyButton = Instance.new("TextButton")
 GetKeyButton.Parent = Frame
 GetKeyButton.Size = UDim2.new(0.4,0,0,30)
-GetKeyButton.Position = UDim2.new(0.05,0,0.75,0)
+GetKeyButton.Position = UDim2.new(0.05,0,0.7,0)
 GetKeyButton.Text = "Get Key"
 
 local CheckButton = Instance.new("TextButton")
 CheckButton.Parent = Frame
 CheckButton.Size = UDim2.new(0.4,0,0,30)
-CheckButton.Position = UDim2.new(0.55,0,0.75,0)
+CheckButton.Position = UDim2.new(0.55,0,0.7,0)
 CheckButton.Text = "Check Key"
 
 GetKeyButton.MouseButton1Click:Connect(function()
     setclipboard(LinkBox.Text)
-    game.StarterGui:SetCore("SendNotification",{
-        Title = "Get Key",
-        Text = "Link copied!"
-    })
+    print("Da copy link get key")
 end)
 
 CheckButton.MouseButton1Click:Connect(function()
     if KeyBox.Text == Key then
-        Frame.Visible = false
+        Frame:Destroy()
 
-        print("Key Correct!")
+        -- MENU CHINH HOAC SCRIPT CHINH DAT O DAY
 
-        -- Script chính ở đây
-
+        print("Key dung")
     else
-        game.StarterGui:SetCore("SendNotification",{
-            Title = "Error",
-            Text = "Wrong Key!"
-        })
+        print("Key sai")
     end
 end)
 local Players = game:GetService("Players")
