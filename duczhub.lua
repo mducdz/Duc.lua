@@ -11,64 +11,34 @@ local Frame = Instance.new("Frame")
 Frame.Parent = ScreenGui
 Frame.Size = UDim2.new(0,300,0,180)
 Frame.Position = UDim2.new(0.5,-150,0.5,-90)
-Frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
 
-local Title = Instance.new("TextLabel")
-Title.Parent = Frame
-Title.Size = UDim2.new(1,0,0,35)
-Title.BackgroundTransparency = 1
-Title.Text = "HZZ HUB | GET KEY"
-Title.TextColor3 = Color3.new(1,1,1)
+local TextBox = Instance.new("TextBox")
+TextBox.Parent = Frame
+TextBox.Size = UDim2.new(0,250,0,40)
+TextBox.Position = UDim2.new(0,25,0,20)
+TextBox.PlaceholderText = "Input Key"
 
-local KeyBox = Instance.new("TextBox")
-KeyBox.Parent = Frame
-KeyBox.Size = UDim2.new(0.9,0,0,35)
-KeyBox.Position = UDim2.new(0.05,0,0.3,0)
-KeyBox.PlaceholderText = "Enter Key"
-KeyBox.Text = ""
+local GetKey = Instance.new("TextButton")
+GetKey.Parent = Frame
+GetKey.Size = UDim2.new(0,120,0,35)
+GetKey.Position = UDim2.new(0,25,0,80)
+GetKey.Text = "Get Key"
 
-local GetKeyButton = Instance.new("TextButton")
-GetKeyButton.Parent = Frame
-GetKeyButton.Size = UDim2.new(0.4,0,0,35)
-GetKeyButton.Position = UDim2.new(0.05,0,0.7,0)
-GetKeyButton.Text = "Get Key"
+local CheckKey = Instance.new("TextButton")
+CheckKey.Parent = Frame
+CheckKey.Size = UDim2.new(0,120,0,35)
+CheckKey.Position = UDim2.new(0,155,0,80)
+CheckKey.Text = "Check Key"
 
-local CheckButton = Instance.new("TextButton")
-CheckButton.Parent = Frame
-CheckButton.Size = UDim2.new(0.4,0,0,35)
-CheckButton.Position = UDim2.new(0.55,0,0.7,0)
-CheckButton.Text = "Check"
-
-GetKeyButton.MouseButton1Click:Connect(function()
-    if setclipboard then
-        setclipboard(GetKeyLink)
-    end
-    print("Copied:", GetKeyLink)
+GetKey.MouseButton1Click:Connect(function()
+    setclipboard(GetKeyLink)
 end)
 
-local function OpenMainHub()
-    local MainFrame = Instance.new("Frame")
-    MainFrame.Parent = ScreenGui
-    MainFrame.Size = UDim2.new(0,400,0,250)
-    MainFrame.Position = UDim2.new(0.5,-200,0.5,-125)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(20,20,20)
-
-    local Label = Instance.new("TextLabel")
-    Label.Parent = MainFrame
-    Label.Size = UDim2.new(1,0,0,40)
-    Label.BackgroundTransparency = 1
-    Label.Text = "HZZ HUB"
-    Label.TextColor3 = Color3.new(1,1,1)
-end
-
-CheckButton.MouseButton1Click:Connect(function()
-    if KeyBox.Text:gsub("%s+","") == CorrectKey then
-        Frame:Destroy()
-        OpenMainHub()
-    else
-        warn("Wrong Key")
+CheckKey.MouseButton1Click:Connect(function()
+    if TextBox.Text == CorrectKey then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/mducdz/mducsitink/refs/heads/main/mducdev.lua"))()
+        ScreenGui:Destroy()
     end
-end)
 end)
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
