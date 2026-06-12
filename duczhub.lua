@@ -1,4 +1,4 @@
-local CorrectKey = "duczontop"
+local CorrectKey = "duczhubtonghop"
 local GetKeyLink = "https://link4sub.com/notes/SKRi"
 
 local Player = game.Players.LocalPlayer
