@@ -1,5 +1,5 @@
-local CorrectKey = "duczhubtonghop"
-local GetKeyLink = "https://link4sub.com/notes/SKRi"
+local CorrectKey = "KEY-STEVEJOBS"
+local GetKeyLink = "https://link4m.net/NZN3IMA"
 
 local Player = game.Players.LocalPlayer
 
