@@ -1,4 +1,4 @@
-local CorrectKey = "KEY-STEVEJOBS"
+local CorrectKey = "KEY-UPDATE"
 local GetKeyLink = "https://link4m.net/NZN3IMA"
 
 local Player = game.Players.LocalPlayer
