@@ -1,144 +1,71 @@
---// NEVO HUB - GET KEY UI
+--[[
+ .____                  ________ ___.    _____                           __                
+ |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
+ |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
+ |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
+ |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
+         \/          \/         \/    \/                \/     \/     \/                   
+          \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
 
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+]]--
 
---========================
--- CONFIG
---========================
-local GET_KEY_LINK = "https://example.com/getkey"
-local CORRECT_KEY = "NEVO123" -- Đổi key của bạn ở đây
+-- Example Code:
+local a = ((16164 + (((3864 + 364101) - 274396) - 67600)) + (190952 - 110638))
+a = a + ((113 - (26 + 67)) + (1219 - (119 + 997))) -- Example obfuscation
 
---========================
--- GUI
---========================
-local gui = Instance.new("ScreenGui")
-gui.Name = "NEVO_GetKey"
-gui.ResetOnSpawn = false
-gui.Parent = player:WaitForChild("PlayerGui")
+-- To hide your precious values, try obfuscating them!
+-- Click the [Literals] button in the upper-right corner
+local b = 1203456
+local c = 1230471
+local d = 8023481
 
-local main = Instance.new("Frame")
-main.Size = UDim2.new(0, 300, 0, 190)
-main.Position = UDim2.new(0.5, -150, 0.5, -95)
-main.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
-main.BorderSizePixel = 0
-main.Parent = gui
+-- The below if-statement is opque and can be predicted as
+-- all conditions are staticly defined
+if c > b then
+    print("true")
+end
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 10)
-corner.Parent = main
+-- You may want to obfuscate such if-statements by using
+-- the [Junk-If] button in the upper right corner
+if 1 + d > c then
+    print("obfuscate the conditions!")
+end
 
-local stroke = Instance.new("UIStroke")
-stroke.Color = Color3.fromRGB(0, 170, 255)
-stroke.Thickness = 2
-stroke.Parent = main
+-- Next is [Strings], which will encrypt all strings but adds
+-- extra code to decrypt them at runtime.
+print("Clicking [Strings] will completely hide this string!")
 
--- Title
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 40)
-title.BackgroundTransparency = 1
-title.Text = "NEVO HUB - GET KEY"
-title.TextColor3 = Color3.fromRGB(0, 170, 255)
-title.TextSize = 20
-title.Font = Enum.Font.GothamBold
-title.Parent = main
+-- Another important thing is to hide the order of things that get executed
+-- to confuse an attacker using Control Flow Flattening. With [CFF v1] we can hide
+-- the control flow of the following blocks.
+do
+   function sieve_of_eratosthenes(n)
+   local is_prime = { }
+       for i = 1, n do
+           is_prime[i] = 1 ~= i
+       end
+       for i = 2, math.floor(math.sqrt(n)) do
+           if is_prime[i] then
+               for j = i* i, n, i do
+                   is_prime[j] = false
+               end
+           end
+       end
+       return is_prime
+   end
+   local primes = sieve_of_eratosthenes(420)
+   for key, value in pairs(primes) do
+       if (value) then
+           print("Prime found: " .. key)
+       end
+   end
+end
 
--- Key box
-local keyBox = Instance.new("TextBox")
-keyBox.Size = UDim2.new(1, -30, 0, 40)
-keyBox.Position = UDim2.new(0, 15, 0, 50)
-keyBox.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-keyBox.BorderSizePixel = 0
-keyBox.PlaceholderText = "Nhập Key..."
-keyBox.Text = ""
-keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-keyBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
-keyBox.TextSize = 15
-keyBox.Font = Enum.Font.Gotham
-keyBox.Parent = main
+-- You might be satisfied with your result, but before sharing your work you should
+-- use [Minify] (under Miscellaneous) to destroy all local variables and comments.
+-- Please note that some pre-configured obfuscate buttons already do this for you ;)
+print("How to obfuscate best?")
 
-local boxCorner = Instance.new("UICorner")
-boxCorner.CornerRadius = UDim.new(0, 7)
-boxCorner.Parent = keyBox
-
--- Get Key
-local getKey = Instance.new("TextButton")
-getKey.Size = UDim2.new(0.46, 0, 0, 38)
-getKey.Position = UDim2.new(0, 15, 0, 105)
-getKey.BackgroundColor3 = Color3.fromRGB(0, 130, 200)
-getKey.BorderSizePixel = 0
-getKey.Text = "GET KEY"
-getKey.TextColor3 = Color3.fromRGB(255, 255, 255)
-getKey.TextSize = 14
-getKey.Font = Enum.Font.GothamBold
-getKey.Parent = main
-
-local getCorner = Instance.new("UICorner")
-getCorner.CornerRadius = UDim.new(0, 7)
-getCorner.Parent = getKey
-
--- Check Key
-local checkKey = Instance.new("TextButton")
-checkKey.Size = UDim2.new(0.46, 0, 0, 38)
-checkKey.Position = UDim2.new(0.54, 0, 0, 105)
-checkKey.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-checkKey.BorderSizePixel = 0
-checkKey.Text = "CHECK KEY"
-checkKey.TextColor3 = Color3.fromRGB(255, 255, 255)
-checkKey.TextSize = 14
-checkKey.Font = Enum.Font.GothamBold
-checkKey.Parent = main
-
-local checkCorner = Instance.new("UICorner")
-checkCorner.CornerRadius = UDim.new(0, 7)
-checkCorner.Parent = checkKey
-
--- Status
-local status = Instance.new("TextLabel")
-status.Size = UDim2.new(1, -30, 0, 25)
-status.Position = UDim2.new(0, 15, 0, 153)
-status.BackgroundTransparency = 1
-status.Text = "Vui lòng nhập key"
-status.TextColor3 = Color3.fromRGB(180, 180, 180)
-status.TextSize = 13
-status.Font = Enum.Font.Gotham
-status.Parent = main
-
---========================
--- GET KEY BUTTON
---========================
-getKey.MouseButton1Click:Connect(function()
-    -- Dùng được trong executor hỗ trợ setclipboard
-    if setclipboard then
-        setclipboard(GET_KEY_LINK)
-        status.Text = "Đã copy link lấy key!"
-        status.TextColor3 = Color3.fromRGB(0, 170, 255)
-    else
-        status.Text = GET_KEY_LINK
-        status.TextColor3 = Color3.fromRGB(0, 170, 255)
-    end
-end)
-
---========================
--- CHECK KEY
---========================
-checkKey.MouseButton1Click:Connect(function()
-    if keyBox.Text == "" then
-        status.Text = "Bạn chưa nhập key!"
-        status.TextColor3 = Color3.fromRGB(255, 180, 0)
-
-    elseif keyBox.Text == CORRECT_KEY then
-        status.Text = "Key đúng! ✓"
-        status.TextColor3 = Color3.fromRGB(0, 255, 100)
-
-        task.wait(0.5)
-        gui:Destroy()
-
-        -- Code chính của NEVO HUB đặt ở đây
-        -- loadstring(...)()
-
-    else
-        status.Text = "Key không đúng!"
-        status.TextColor3 = Color3.fromRGB(255, 70, 70)
-    end
-end)
+-- The highest level of obfuscation is done through virtualization,
+-- in our case this means we will be running Lua inside Lua using the
+-- Ironbrew2 virtulization tool. Ready? click [Demo VM] and see what happens!
