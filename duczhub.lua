@@ -1,4 +1,4 @@
-local function NotificacaoLongHiHiHub(titulo, mensagem)
+local function NotificacaoNEVOHub(titulo, mensagem)
     local success = pcall(function()
         local TweenService = (Services and Services.TweenService) or game:GetService("TweenService")
         local CoreGui = (Services and Services.CoreGui) or game:GetService("CoreGui")
@@ -35,7 +35,7 @@ local function NotificacaoLongHiHiHub(titulo, mensagem)
         end
 
         local Main = Instance.new("CanvasGroup")
-        Main.Name = "LongHiHiNoti"
+        Main.Name = "NEVONoti"
         Main.Parent = Holder
         Main.Size = UDim2.new(1, 0, 0, 80)
         Main.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
@@ -46,7 +46,7 @@ local function NotificacaoLongHiHiHub(titulo, mensagem)
 
         local UIStroke = Instance.new("UIStroke")
         UIStroke.Parent = Main
-        UIStroke.Color = Color3.fromRGB(200, 60, 60)
+        UIStroke.Color = Color3.fromRGB(65, 150, 255)
         UIStroke.Thickness = 1
         UIStroke.Transparency = 0.35
         UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
@@ -147,11 +147,11 @@ local function NotificacaoLongHiHiHub(titulo, mensagem)
     end)
 
     if not success then
-        warn("[LongHiHi Hub] Erro ao exibir notificação")
+        warn("[NEVO Hub] Erro ao exibir notificação")
     end
 end
 
-NotificacaoLongHiHiHub("LongHiHi Notification 🔔", "Script Version : V4.5")
+NotificacaoNEVOHub("NEVO Notification 🔔", "Script Version : V4.5")
 
 do
   ply = game.Players
@@ -1149,8 +1149,8 @@ spawn(function()
     local Test = Instance.new("Highlight")
     Test.Name = "highlight"
     Test.Enabled = true
-    Test.FillColor = Color3.fromRGB(255, 0, 0)
-    Test.OutlineColor = Color3.fromRGB(255, 0, 0)
+    Test.FillColor = Color3.fromRGB(65, 150, 255)
+    Test.OutlineColor = Color3.fromRGB(65, 150, 255)
     Test.FillTransparency = 0.5
     Test.OutlineTransparency = 0.2
     Test.Parent = plr.Character
@@ -1470,9 +1470,9 @@ end
 
 local redzlib = loadstring(game:HttpGet("https://pastefy.app/AVEeQ2xz/raw"))()
 local Window = redzlib:MakeWindow({
-  Title = "<font color='rgb(255,0,0)'>LongHiHi Hub </font>",
-  SubTitle = "<font color='rgb(255, 165, 0)'>- Blox Fruit</font>",
-  SaveFolder = "HetTetRoi.lua"
+  Title = "<font color='rgb(255,0,0)'>NEVO Hub </font>",
+  SubTitle = "<font color='rgb(120,190,255)'>- Blox Fruit</font>",
+  SaveFolder = "NEVO_HUB_Config"
 })
 
 Window:AddMinimizeButton({
