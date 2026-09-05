@@ -1532,7 +1532,7 @@ end
 
 local Fluent
 local ok, err = pcall(function()
-    Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/xshiba/OBFUP/refs/heads/main/GET.lua"))()
+    Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 end)
 
 if not ok or not Fluent then
@@ -1546,7 +1546,7 @@ local Window = Fluent:CreateWindow({
     SubTitle = "Blox Fruit",
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true,
-    Theme = "Darker",
+    Theme = "Dark",
     MinimizeKey = Enum.KeyCode.LeftControl,
     TabWidth = 160
 })
@@ -1612,6 +1612,10 @@ local Tabs = {
     Shop = _nevo_wrap(Window:AddTab({Title="Tab Shopping"})),
     Misc = _nevo_wrap(Window:AddTab({Title="Tab Miscellaneous"}))
 }
+
+pcall(function()
+    Window:SelectTab(1)
+end)
 
 -- UI da san sang, tat loading ngay sau khi cac tab duoc tao.
 task.defer(HideNEVOLoading)
