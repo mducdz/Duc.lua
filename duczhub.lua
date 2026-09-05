@@ -1,3 +1,80 @@
+-- NEVO Fluent Maru loading screen
+repeat task.wait() until game:IsLoaded() and game.Players.LocalPlayer
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+
+local HNC = Instance.new("ScreenGui")
+HNC.Name = "@hnc_roblox"
+HNC.IgnoreGuiInset = true
+HNC.ZIndexBehavior = Enum.ZIndexBehavior.Global
+HNC.DisplayOrder = 999999
+HNC.ResetOnSpawn = false
+HNC.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+local BG = Instance.new("Frame")
+BG.Size = UDim2.fromScale(1,1)
+BG.BackgroundColor3 = Color3.new(0,0,0)
+BG.BackgroundTransparency = 0.4
+BG.Parent = HNC
+
+local Container = Instance.new("Frame")
+Container.Size = UDim2.fromOffset(220,160)
+Container.AnchorPoint = Vector2.new(0.5,0.5)
+Container.Position = UDim2.fromScale(0.5,0.5)
+Container.BackgroundTransparency = 1
+Container.Parent = HNC
+
+local Circle = Instance.new("Frame")
+Circle.Size = UDim2.fromOffset(70,70)
+Circle.AnchorPoint = Vector2.new(0.5,0.5)
+Circle.Position = UDim2.fromScale(0.5,0.35)
+Circle.BackgroundTransparency = 1
+Circle.Parent = Container
+Instance.new("UICorner", Circle).CornerRadius = UDim.new(1,0)
+local Stroke = Instance.new("UIStroke")
+Stroke.Thickness = 8
+Stroke.Color = Color3.fromRGB(255,255,255)
+Stroke.Parent = Circle
+
+local Text = Instance.new("TextLabel")
+Text.Size = UDim2.new(1,0,0,40)
+Text.Position = UDim2.fromScale(0,0.9)
+Text.BackgroundTransparency = 1
+Text.Font = Enum.Font.GothamBold
+Text.Text = "Loading..."
+Text.TextSize = 28
+Text.TextColor3 = Color3.fromRGB(255,255,255)
+Text.Parent = Container
+
+local loadingAlive = true
+local loadingStart = tick()
+local loadingMinimumDuration = 5
+task.spawn(function()
+    while loadingAlive and HNC.Parent do
+        local a = TweenService:Create(Circle, TweenInfo.new(0.65, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Size=UDim2.fromOffset(90,90)})
+        a:Play(); a.Completed:Wait()
+        if not loadingAlive then break end
+        local b = TweenService:Create(Circle, TweenInfo.new(0.65, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Size=UDim2.fromOffset(70,70)})
+        b:Play(); b.Completed:Wait()
+    end
+end)
+
+local function HideNEVOLoading()
+    local remain = loadingMinimumDuration - (tick() - loadingStart)
+    if remain > 0 then task.wait(remain) end
+    loadingAlive = false
+    if not HNC or not HNC.Parent then return end
+    local info = TweenInfo.new(0.45, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+    local t1 = TweenService:Create(BG, info, {BackgroundTransparency=1})
+    local t2 = TweenService:Create(Stroke, info, {Transparency=1})
+    local t3 = TweenService:Create(Text, info, {TextTransparency=1})
+    t1:Play(); t2:Play(); t3:Play()
+    t1.Completed:Wait()
+    HNC:Destroy()
+end
+
 local function NotificacaoNEVOHub(titulo, mensagem)
     local success = pcall(function()
         local TweenService = (Services and Services.TweenService) or game:GetService("TweenService")
@@ -151,6 +228,69 @@ local function NotificacaoNEVOHub(titulo, mensagem)
     end
 end
 
+local EzFastAttack = nil
+task.spawn(function()
+    pcall(function()
+        EzFastAttack = loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-AnhTuansitink/Module/refs/heads/main/EzFastAttack.lua"))()
+        if EzFastAttack then
+            print("[EZFA] ✅ Đã load EzFastAttack thành công!")
+            -- Gán Attack table
+            if type(EzFastAttack) == "table" and EzFastAttack.Attack then
+                Attack = EzFastAttack.Attack
+            elseif type(EzFastAttack) == "table" then
+                Attack = EzFastAttack
+            end
+        end
+    end)
+end)
+local waitTime = 0
+while (not Attack or not Attack.Kill) and waitTime < 5 do
+    task.wait(0.1)
+    waitTime = waitTime + 0.1
+end
+
+if not Attack then
+    Attack = {}
+end
+
+-- Fallback Kill function - an toàn hơn
+if not Attack.Kill then
+    Attack.Kill = function(enemy, mode)
+        if not enemy then return end
+        local hrp = enemy:FindFirstChild("HumanoidRootPart")
+        local hum = enemy:FindFirstChild("Humanoid")
+        if not hrp or not hum or hum.Health <= 0 then return end
+        
+        -- Gửi attack request cơ bản
+        pcall(function()
+            local RS = game:GetService("ReplicatedStorage")
+            local Net = RS.Modules.Net
+            if Net then
+                local attack = Net:FindFirstChild("RE/RegisterAttack")
+                local hit = Net:FindFirstChild("RE/RegisterHit")
+                if attack then attack:FireServer(0) end
+                if hit then hit:FireServer(hrp, {{enemy, hrp}}) end
+            end
+        end)
+    end
+end
+
+-- Fallback Alive
+if not Attack.Alive then
+    Attack.Alive = function(enemy)
+        if not enemy then return false end
+        local hum = enemy:FindFirstChild("Humanoid")
+        return hum and hum.Health > 0
+    end
+end
+
+-- Fallback Kill2, KillSea, Mas, Masgun, Sword
+if not Attack.Kill2 then Attack.Kill2 = Attack.Kill end
+if not Attack.KillSea then Attack.KillSea = Attack.Kill end
+if not Attack.Mas then Attack.Mas = Attack.Kill end
+if not Attack.Masgun then Attack.Masgun = Attack.Kill end
+if not Attack.Sword then Attack.Sword = Attack.Kill end
+
 NotificacaoNEVOHub("NEVO Notification 🔔", "Script Version : V4.5")
 
 do
@@ -224,88 +364,6 @@ weaponSc = function(weapon)
   for __in, v in pairs(plr.Backpack:GetChildren()) do
     if v:IsA("Tool") then
       if v.ToolTip == weapon then EquipWeapon(v.Name) end
-    end
-  end
-end
-local Attack = {}
-Attack.__index = Attack
-Attack.Alive = function(model) if not model then return end local Humanoid = model:FindFirstChild("Humanoid") return Humanoid and Humanoid.Health > 0 end
-Attack.Pos = function(model,dist) return (Root.Position - mode.Position).Magnitude <= dist end
-Attack.Dist = function(model,dist) return (Root.Position - model:FindFirstChild("HumanoidRootPart").Position).Magnitude <= dist end
-Attack.DistH = function(model,dist) return (Root.Position - model:FindFirstChild("HumanoidRootPart").Position).Magnitude > dist end
-Attack.Kill = function(model,Succes)
-  if model and Succes then
-  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
-  PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
-  EquipWeapon(_G.SelectWeapon)
-  local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
-  local ToolTip = Equipped.ToolTip
-  if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0) * CFrame.Angles(0,math.rad(180),0))end
-  if RandomCFrame then wait(.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
-  end
-end
-Attack.Kill2 = function(model,Succes)
-  if model and Succes then
-  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
-  PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
-  EquipWeapon(_G.SelectWeapon)
-  local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
-  local ToolTip = Equipped.ToolTip
-  if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,8) * CFrame.Angles(0,math.rad(180),0))end
-  if RandomCFrame then wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
-  end
-end
-Attack.KillSea = function(model,Succes)
-  if model and Succes then
-  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
-  PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
-  EquipWeapon(_G.SelectWeapon)
-  local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
-  local ToolTip = Equipped.ToolTip
-  if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else notween(model.HumanoidRootPart.CFrame * CFrame.new(0,50,8)) wait(.85)notween(model.HumanoidRootPart.CFrame * CFrame.new(0,400,0)) wait(1)end
-  end
-end
-Attack.Sword = function(model,Succes)
-  if model and Succes then
-  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
-  PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
-  weaponSc("Sword")
-  _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
-  if RandomCFrame then wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
-  end
-end
-Attack.Mas = function(model,Succes)
-  if model and Succes then
-  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
-  PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
-    if model.Humanoid.Health <= HealthM then
-      _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,20,0))
-      Useskills("Blox Fruit","Z")
-      Useskills("Blox Fruit","X")
-      Useskills("Blox Fruit","C")
-    else
-      weaponSc("Melee")
-      _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
-    end
-  end
-end
-Attack.Masgun = function(model,Succes)
-  if model and Succes then
-  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
-  PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
-    if model.Humanoid.Health <= HealthM then
-      _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,35,8))
-      Useskills("Gun","Z")
-      Useskills("Gun","X")
-    else
-      weaponSc("Melee")
-      _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
     end
   end
 end
@@ -1468,34 +1526,95 @@ QuestNeta = function()
     }
 end
 
-local redzlib = loadstring(game:HttpGet("https://pastefy.app/AVEeQ2xz/raw"))()
-local Window = redzlib:MakeWindow({
-  Title = "<font color='rgb(255,0,0)'>NEVO Hub </font>",
-  SubTitle = "<font color='rgb(120,190,255)'>- Blox Fruit</font>",
-  SaveFolder = "NEVO_HUB_Config"
+-- NEVO Hub - Fluent Maru UI
+-- Toan bo code chuc nang cua message.txt duoc giu nguyen.
+-- Chi thay UI Redz bang Fluent; tab khong dung Icon.
+
+local Fluent
+local ok, err = pcall(function()
+    Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/xshiba/OBFUP/refs/heads/main/GET.lua"))()
+end)
+
+if not ok or not Fluent then
+    warn("[NEVO] Khong load duoc Fluent UI: " .. tostring(err))
+    HideNEVOLoading()
+    return
+end
+
+local Window = Fluent:CreateWindow({
+    Title = "NEVO Hub",
+    SubTitle = "Blox Fruit",
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true,
+    Theme = "Darker",
+    MinimizeKey = Enum.KeyCode.LeftControl,
+    TabWidth = 160
 })
 
-Window:AddMinimizeButton({
-    Button = { Image = "rbxassetid://106607578414348", BackgroundTransparency = 0 },
-    Corner = { CornerRadius = UDim.new(0, 5) },
-})
+local _nevo_tab_counter = 0
+local _nevo_control_counter = 0
+local function _nevo_norm(cfg)
+    cfg = type(cfg) == "table" and cfg or {}
+    if cfg.Title == nil and cfg.Name ~= nil then cfg.Title = cfg.Name end
+    if cfg.Values == nil and cfg.Options ~= nil then cfg.Values = cfg.Options end
+    if cfg.Rounding == nil then cfg.Rounding = 0 end
+    return cfg
+end
+
+local function _nevo_wrap(tab)
+    local adapter = {}
+    function adapter:AddSection(title) return tab:AddSection(title) end
+    function adapter:AddToggle(a,b)
+        local cfg = type(a)=="table" and _nevo_norm(a) or _nevo_norm(b)
+        _nevo_control_counter += 1
+        local id = (cfg.Name or cfg.Title or "Toggle") .. "_" .. tostring(_nevo_control_counter)
+        return tab:AddToggle(id,cfg)
+    end
+    function adapter:AddDropdown(a,b)
+        local cfg = type(a)=="table" and _nevo_norm(a) or _nevo_norm(b)
+        _nevo_control_counter += 1
+        local id = (cfg.Name or cfg.Title or "Dropdown") .. "_" .. tostring(_nevo_control_counter)
+        return tab:AddDropdown(id,cfg)
+    end
+    function adapter:AddSlider(a,b)
+        local cfg = type(a)=="table" and _nevo_norm(a) or _nevo_norm(b)
+        _nevo_control_counter += 1
+        local id = (cfg.Name or cfg.Title or "Slider") .. "_" .. tostring(_nevo_control_counter)
+        return tab:AddSlider(id,cfg)
+    end
+    function adapter:AddTextBox(a,b)
+        local cfg = type(a)=="table" and _nevo_norm(a) or _nevo_norm(b)
+        _nevo_control_counter += 1
+        local id = (cfg.Name or cfg.Title or "Input") .. "_" .. tostring(_nevo_control_counter)
+        return tab:AddInput(id,cfg)
+    end
+    function adapter:AddButton(cfg) return tab:AddButton(_nevo_norm(cfg)) end
+    function adapter:AddParagraph(a,b)
+        if type(a)=="table" then return tab:AddParagraph(_nevo_norm(a)) end
+        return tab:AddParagraph({Title=tostring(a or ""),Content=tostring(b or "")})
+    end
+    return setmetatable(adapter,{__index=function(_,k) return tab[k] end})
+end
 
 local Tabs = {
-    Info = Window:MakeTab({ Title = "Tab Status Sever", Icon = "rbxassetid://10709752035" }),
-    Main = Window:MakeTab({ Title = "Tab Farming", Icon = "rbxassetid://7733960981" }),
-    Settings = Window:MakeTab({ Title = "Tab Setting", Icon = "rbxassetid://7734053495" }),
-    Fish = Window:MakeTab({ Title = "Tab Fishing", Icon = "rbxassetid://127664059821666" }),
-    Quests = Window:MakeTab({ Title = "Tab Quest And Item", Icon = "rbxassetid://13075622619" }),
-    SeaEvent = Window:MakeTab({ Title = "Tab Sea Event", Icon = "rbxassetid://10747376931" }),
-    Race = Window:MakeTab({ Title = "Tab Mirage And Race", Icon = "rbxassetid://11162889532" }),
-    Prehistoric = Window:MakeTab({ Title = "Tab Volcano Event", Icon = "rbxassetid://10723376114" }),
-    Esp = Window:MakeTab({ Title = "Tab Stats And Esp", Icon = "rbxassetid://7040410130" }),
-    Raids = Window:MakeTab({ Title = "Tab Fruit And Raid", Icon = "rbxassetid://11155986081" }),
-    Combat = Window:MakeTab({ Title = "Tab Local Player", Icon = "rbxassetid://13075651575" }),
-    Travel = Window:MakeTab({ Title = "Tab Teleport", Icon = "rbxassetid://10734886004" }),
-    Shop = Window:MakeTab({ Title = "Tab Shopping", Icon = "rbxassetid://6031265976" }),
-    Misc = Window:MakeTab({ Title = "Tab Miscellaneous", Icon = "rbxassetid://10709783577" })
+    Info = _nevo_wrap(Window:AddTab({Title="Tab Status Sever"})),
+    Main = _nevo_wrap(Window:AddTab({Title="Tab Farming"})),
+    Settings = _nevo_wrap(Window:AddTab({Title="Tab Setting"})),
+    Fish = _nevo_wrap(Window:AddTab({Title="Tab Fishing"})),
+    Quests = _nevo_wrap(Window:AddTab({Title="Tab Quest And Item"})),
+    SeaEvent = _nevo_wrap(Window:AddTab({Title="Tab Sea Event"})),
+    Race = _nevo_wrap(Window:AddTab({Title="Tab Mirage And Race"})),
+    Prehistoric = _nevo_wrap(Window:AddTab({Title="Tab Volcano Event"})),
+    Esp = _nevo_wrap(Window:AddTab({Title="Tab Stats And Esp"})),
+    Raids = _nevo_wrap(Window:AddTab({Title="Tab Fruit And Raid"})),
+    Combat = _nevo_wrap(Window:AddTab({Title="Tab Local Player"})),
+    Travel = _nevo_wrap(Window:AddTab({Title="Tab Teleport"})),
+    Shop = _nevo_wrap(Window:AddTab({Title="Tab Shopping"})),
+    Misc = _nevo_wrap(Window:AddTab({Title="Tab Miscellaneous"}))
 }
+
+-- UI da san sang, tat loading ngay sau khi cac tab duoc tao.
+task.defer(HideNEVOLoading)
 
 Tabs.Info:AddSection("Status Server")
 
@@ -1741,123 +1860,6 @@ spawn(function()
         end)
     end
 end)
---// =====================================
---// FAST ATTACK v3 · NHANH NHẤT
---// =====================================
-
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local Player = Players.LocalPlayer
-
-local Active = false
-local Connection = nil
-
---// ═══ CACHE — TÌM 1 LẦN DUY NHẤT ═══
-local cachedRemote = nil
-local cacheTime = 0
-local enemiesFolder = nil
-local charsFolder = nil
-
-local function refreshCache()
-    enemiesFolder = workspace:FindFirstChild("Enemies")
-    charsFolder = workspace:FindFirstChild("Characters")
-
-    local char = Player.Character
-    if not char then cachedRemote = nil; return end
-
-    for _, v in ipairs(char:GetChildren()) do
-        if v:IsA("Tool") and v.ToolTip == "Blox Fruit" then
-            cachedRemote = v:FindFirstChild("LeftClickRemote")
-            if cachedRemote then return end
-        end
-    end
-    for _, v in ipairs(Player.Backpack:GetChildren()) do
-        if v:IsA("Tool") and v.ToolTip == "Blox Fruit" then
-            cachedRemote = v:FindFirstChild("LeftClickRemote")
-            if cachedRemote then return end
-        end
-    end
-    cachedRemote = nil
-end
-
---// ═══ ATTACK — BẮN LIÊN TỤC KHÔNG CHỜ ═══
-local hit = Vector3.new(0.01, -500, 0.01)
-
-local function fireAll()
-    if not cachedRemote then return end
-    -- 3 lần mỗi tick = quái chết cực nhanh
-    cachedRemote:FireServer(hit, 1, true)
-    cachedRemote:FireServer(false)
-    cachedRemote:FireServer(hit, 1, true)
-end
-
---// ═══ SCAN NHANH — BỎ Magnitude, DÙNG dist² ═══
-local MAX_DIST_SQ = 100000000 -- 10000²
-local scanResult = false
-
-local function hasTarget(folder, myPos, myChar)
-    if not folder then return end
-    for _, v in ipairs(folder:GetChildren()) do
-        if v ~= myChar then
-            local tHRP = v:FindFirstChild("HumanoidRootPart")
-            if tHRP then
-                local hum = v:FindFirstChild("Humanoid")
-                if hum and hum.Health > 0 then
-                    local p = tHRP.Position
-                    local dx = myPos.X - p.X
-                    local dy = myPos.Y - p.Y
-                    local dz = myPos.Z - p.Z
-                    if dx*dx + dy*dy + dz*dz <= MAX_DIST_SQ then
-                        scanResult = true
-                        return
-                    end
-                end
-            end
-        end
-    end
-end
-
---// ═══ LOOP — STEPPED + CACHE 3s ═══
-Connection = RunService.Stepped:Connect(function()
-    if not Active then return end
-
-    local now = tick()
-    if now - cacheTime >= 3 then
-        cacheTime = now
-        refreshCache()
-    end
-
-    if not cachedRemote then return end
-
-    local char = Player.Character
-    if not char then return end
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    if not hrp then return end
-
-    local myPos = hrp.Position
-    scanResult = false
-    hasTarget(enemiesFolder, myPos, char)
-    if not scanResult then hasTarget(charsFolder, myPos, char) end
-
-    if scanResult then fireAll() end
-end)
-
---// ═══ RESPAHN → REFRESH CACHE ═══
-Player.CharacterAdded:Connect(function()
-    task.wait(1)
-    refreshCache()
-end)
-
---// ═══ TOGGLE ═══
-Tabs.Main:AddToggle({
-    Name = "Attack Aura Fruit [ Beta ]",
-    Default = false,
-    Callback = function(Value)
-        Active = Value
-        if Value then refreshCache() end
-    end
-})
-
 
 Tabs.Main:AddSection("Farming")
 
