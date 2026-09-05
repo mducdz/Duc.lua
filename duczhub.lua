@@ -1,80 +1,3 @@
--- NEVO Fluent Maru loading screen
-repeat task.wait() until game:IsLoaded() and game.Players.LocalPlayer
-
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local TweenService = game:GetService("TweenService")
-
-local HNC = Instance.new("ScreenGui")
-HNC.Name = "@hnc_roblox"
-HNC.IgnoreGuiInset = true
-HNC.ZIndexBehavior = Enum.ZIndexBehavior.Global
-HNC.DisplayOrder = 999999
-HNC.ResetOnSpawn = false
-HNC.Parent = LocalPlayer:WaitForChild("PlayerGui")
-
-local BG = Instance.new("Frame")
-BG.Size = UDim2.fromScale(1,1)
-BG.BackgroundColor3 = Color3.new(0,0,0)
-BG.BackgroundTransparency = 0.4
-BG.Parent = HNC
-
-local Container = Instance.new("Frame")
-Container.Size = UDim2.fromOffset(220,160)
-Container.AnchorPoint = Vector2.new(0.5,0.5)
-Container.Position = UDim2.fromScale(0.5,0.5)
-Container.BackgroundTransparency = 1
-Container.Parent = HNC
-
-local Circle = Instance.new("Frame")
-Circle.Size = UDim2.fromOffset(70,70)
-Circle.AnchorPoint = Vector2.new(0.5,0.5)
-Circle.Position = UDim2.fromScale(0.5,0.35)
-Circle.BackgroundTransparency = 1
-Circle.Parent = Container
-Instance.new("UICorner", Circle).CornerRadius = UDim.new(1,0)
-local Stroke = Instance.new("UIStroke")
-Stroke.Thickness = 8
-Stroke.Color = Color3.fromRGB(255,255,255)
-Stroke.Parent = Circle
-
-local Text = Instance.new("TextLabel")
-Text.Size = UDim2.new(1,0,0,40)
-Text.Position = UDim2.fromScale(0,0.9)
-Text.BackgroundTransparency = 1
-Text.Font = Enum.Font.GothamBold
-Text.Text = "Loading..."
-Text.TextSize = 28
-Text.TextColor3 = Color3.fromRGB(255,255,255)
-Text.Parent = Container
-
-local loadingAlive = true
-local loadingStart = tick()
-local loadingMinimumDuration = 5
-task.spawn(function()
-    while loadingAlive and HNC.Parent do
-        local a = TweenService:Create(Circle, TweenInfo.new(0.65, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Size=UDim2.fromOffset(90,90)})
-        a:Play(); a.Completed:Wait()
-        if not loadingAlive then break end
-        local b = TweenService:Create(Circle, TweenInfo.new(0.65, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Size=UDim2.fromOffset(70,70)})
-        b:Play(); b.Completed:Wait()
-    end
-end)
-
-local function HideNEVOLoading()
-    local remain = loadingMinimumDuration - (tick() - loadingStart)
-    if remain > 0 then task.wait(remain) end
-    loadingAlive = false
-    if not HNC or not HNC.Parent then return end
-    local info = TweenInfo.new(0.45, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-    local t1 = TweenService:Create(BG, info, {BackgroundTransparency=1})
-    local t2 = TweenService:Create(Stroke, info, {Transparency=1})
-    local t3 = TweenService:Create(Text, info, {TextTransparency=1})
-    t1:Play(); t2:Play(); t3:Play()
-    t1.Completed:Wait()
-    HNC:Destroy()
-end
-
 local function NotificacaoNEVOHub(titulo, mensagem)
     local success = pcall(function()
         local TweenService = (Services and Services.TweenService) or game:GetService("TweenService")
@@ -1526,99 +1449,150 @@ QuestNeta = function()
     }
 end
 
+-- ============================================================
 -- NEVO Hub - Fluent Maru UI
--- Toan bo code chuc nang cua message.txt duoc giu nguyen.
--- Chi thay UI Redz bang Fluent; tab khong dung Icon.
+-- Original message.txt logic is preserved in full.
+-- Tab icons and external loading screen intentionally removed.
+-- ============================================================
 
 local Fluent
 local ok, err = pcall(function()
-    Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+    Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/xshiba/OBFUP/refs/heads/main/GET.lua"))()
 end)
 
 if not ok or not Fluent then
-    warn("[NEVO] Khong load duoc Fluent UI: " .. tostring(err))
-    HideNEVOLoading()
+    warn("[NEVO] Fluent UI load failed:", err)
     return
 end
 
 local Window = Fluent:CreateWindow({
     Title = "NEVO Hub",
     SubTitle = "Blox Fruit",
-    Size = UDim2.fromOffset(580, 460),
+    Size = UDim2.fromOffset(620, 500),
     Acrylic = true,
-    Theme = "Dark",
+    Theme = "Darker",
     MinimizeKey = Enum.KeyCode.LeftControl,
-    TabWidth = 160
+    TabWidth = 165
 })
 
-local _nevo_tab_counter = 0
-local _nevo_control_counter = 0
-local function _nevo_norm(cfg)
-    cfg = type(cfg) == "table" and cfg or {}
-    if cfg.Title == nil and cfg.Name ~= nil then cfg.Title = cfg.Name end
-    if cfg.Values == nil and cfg.Options ~= nil then cfg.Values = cfg.Options end
-    if cfg.Rounding == nil then cfg.Rounding = 0 end
-    return cfg
+-- Compatibility adapter: keeps the original message.txt calls working
+-- while translating Redz-style arguments to Fluent's API.
+local function NormalizeOptions(options)
+    if type(options) ~= "table" then
+        return {}
+    end
+
+    local result = {}
+    for k, v in pairs(options) do
+        result[k] = v
+    end
+
+    if result.Title == nil and result.Name ~= nil then
+        result.Title = result.Name
+    end
+
+    if result.Values == nil and result.Options ~= nil then
+        result.Values = result.Options
+    end
+
+    if result.Rounding == nil then
+        result.Rounding = 0
+    end
+
+    return result
 end
 
-local function _nevo_wrap(tab)
+local function MakeId(prefix, value)
+    local text = tostring(value or "")
+    text = text:gsub("%s+", "_"):gsub("[^%w_]", "_")
+    if text == "" then
+        text = "Element"
+    end
+    return prefix .. "_" .. text .. "_" .. tostring(math.random(10000, 99999))
+end
+
+local function WrapTab(tab, tabName)
     local adapter = {}
-    function adapter:AddSection(title) return tab:AddSection(title) end
-    function adapter:AddToggle(a,b)
-        local cfg = type(a)=="table" and _nevo_norm(a) or _nevo_norm(b)
-        _nevo_control_counter += 1
-        local id = (cfg.Name or cfg.Title or "Toggle") .. "_" .. tostring(_nevo_control_counter)
-        return tab:AddToggle(id,cfg)
+
+    function adapter:AddSection(title)
+        return tab:AddSection(title)
     end
-    function adapter:AddDropdown(a,b)
-        local cfg = type(a)=="table" and _nevo_norm(a) or _nevo_norm(b)
-        _nevo_control_counter += 1
-        local id = (cfg.Name or cfg.Title or "Dropdown") .. "_" .. tostring(_nevo_control_counter)
-        return tab:AddDropdown(id,cfg)
+
+    function adapter:AddToggle(idOrOptions, maybeOptions)
+        if type(idOrOptions) == "table" then
+            local options = NormalizeOptions(idOrOptions)
+            local id = MakeId(tabName .. "_Toggle", options.Name or options.Title)
+            return tab:AddToggle(id, options)
+        end
+        return tab:AddToggle(idOrOptions, NormalizeOptions(maybeOptions))
     end
-    function adapter:AddSlider(a,b)
-        local cfg = type(a)=="table" and _nevo_norm(a) or _nevo_norm(b)
-        _nevo_control_counter += 1
-        local id = (cfg.Name or cfg.Title or "Slider") .. "_" .. tostring(_nevo_control_counter)
-        return tab:AddSlider(id,cfg)
+
+    function adapter:AddButton(options)
+        return tab:AddButton(NormalizeOptions(options))
     end
-    function adapter:AddTextBox(a,b)
-        local cfg = type(a)=="table" and _nevo_norm(a) or _nevo_norm(b)
-        _nevo_control_counter += 1
-        local id = (cfg.Name or cfg.Title or "Input") .. "_" .. tostring(_nevo_control_counter)
-        return tab:AddInput(id,cfg)
+
+    function adapter:AddDropdown(idOrOptions, maybeOptions)
+        if type(idOrOptions) == "table" then
+            local options = NormalizeOptions(idOrOptions)
+            local id = MakeId(tabName .. "_Dropdown", options.Name or options.Title)
+            return tab:AddDropdown(id, options)
+        end
+        return tab:AddDropdown(idOrOptions, NormalizeOptions(maybeOptions))
     end
-    function adapter:AddButton(cfg) return tab:AddButton(_nevo_norm(cfg)) end
-    function adapter:AddParagraph(a,b)
-        if type(a)=="table" then return tab:AddParagraph(_nevo_norm(a)) end
-        return tab:AddParagraph({Title=tostring(a or ""),Content=tostring(b or "")})
+
+    function adapter:AddSlider(idOrOptions, maybeOptions)
+        if type(idOrOptions) == "table" then
+            local options = NormalizeOptions(idOrOptions)
+            local id = MakeId(tabName .. "_Slider", options.Name or options.Title)
+            return tab:AddSlider(id, options)
+        end
+        return tab:AddSlider(idOrOptions, NormalizeOptions(maybeOptions))
     end
-    return setmetatable(adapter,{__index=function(_,k) return tab[k] end})
+
+    function adapter:AddTextBox(idOrOptions, maybeOptions)
+        if type(idOrOptions) == "table" then
+            local options = NormalizeOptions(idOrOptions)
+            local id = MakeId(tabName .. "_Input", options.Name or options.Title)
+            return tab:AddInput(id, options)
+        end
+        return tab:AddInput(idOrOptions, NormalizeOptions(maybeOptions))
+    end
+
+    function adapter:AddParagraph(title, description)
+        if type(title) == "table" then
+            return tab:AddParagraph(NormalizeOptions(title))
+        end
+        return tab:AddParagraph({
+            Title = tostring(title or ""),
+            Content = tostring(description or "")
+        })
+    end
+
+    setmetatable(adapter, {
+        __index = function(_, key)
+            return tab[key]
+        end
+    })
+
+    return adapter
 end
 
 local Tabs = {
-    Info = _nevo_wrap(Window:AddTab({Title="Tab Status Sever"})),
-    Main = _nevo_wrap(Window:AddTab({Title="Tab Farming"})),
-    Settings = _nevo_wrap(Window:AddTab({Title="Tab Setting"})),
-    Fish = _nevo_wrap(Window:AddTab({Title="Tab Fishing"})),
-    Quests = _nevo_wrap(Window:AddTab({Title="Tab Quest And Item"})),
-    SeaEvent = _nevo_wrap(Window:AddTab({Title="Tab Sea Event"})),
-    Race = _nevo_wrap(Window:AddTab({Title="Tab Mirage And Race"})),
-    Prehistoric = _nevo_wrap(Window:AddTab({Title="Tab Volcano Event"})),
-    Esp = _nevo_wrap(Window:AddTab({Title="Tab Stats And Esp"})),
-    Raids = _nevo_wrap(Window:AddTab({Title="Tab Fruit And Raid"})),
-    Combat = _nevo_wrap(Window:AddTab({Title="Tab Local Player"})),
-    Travel = _nevo_wrap(Window:AddTab({Title="Tab Teleport"})),
-    Shop = _nevo_wrap(Window:AddTab({Title="Tab Shopping"})),
-    Misc = _nevo_wrap(Window:AddTab({Title="Tab Miscellaneous"}))
+    Info = WrapTab(Window:AddTab({Title = "Tab Status Sever"}), "Info"),
+    Main = WrapTab(Window:AddTab({Title = "Tab Farming"}), "Main"),
+    Settings = WrapTab(Window:AddTab({Title = "Tab Setting"}), "Settings"),
+    Fish = WrapTab(Window:AddTab({Title = "Tab Fishing"}), "Fish"),
+    Quests = WrapTab(Window:AddTab({Title = "Tab Quest And Item"}), "Quests"),
+    SeaEvent = WrapTab(Window:AddTab({Title = "Tab Sea Event"}), "SeaEvent"),
+    Race = WrapTab(Window:AddTab({Title = "Tab Mirage And Race"}), "Race"),
+    Prehistoric = WrapTab(Window:AddTab({Title = "Tab Volcano Event"}), "Prehistoric"),
+    Esp = WrapTab(Window:AddTab({Title = "Tab Stats And Esp"}), "Esp"),
+    Raids = WrapTab(Window:AddTab({Title = "Tab Fruit And Raid"}), "Raids"),
+    Combat = WrapTab(Window:AddTab({Title = "Tab Local Player"}), "Combat"),
+    Travel = WrapTab(Window:AddTab({Title = "Tab Teleport"}), "Travel"),
+    Shop = WrapTab(Window:AddTab({Title = "Tab Shopping"}), "Shop"),
+    Misc = WrapTab(Window:AddTab({Title = "Tab Miscellaneous"}), "Misc")
 }
-
-pcall(function()
-    Window:SelectTab(1)
-end)
-
--- UI da san sang, tat loading ngay sau khi cac tab duoc tao.
-task.defer(HideNEVOLoading)
 
 Tabs.Info:AddSection("Status Server")
 
